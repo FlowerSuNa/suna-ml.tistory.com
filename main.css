@@ -2293,12 +2293,12 @@ hr[data-ke-style='style8'],
 .toc-absolute {
   display: flex;
   position: absolute;
-  margin-bottom:165px;
+  margin-top: 25%;
 }
 
 .toc-fixed {
   position: fixed;
-  bottom: 165px;
+  top: 25%;
 }
 
 .toc {
@@ -2307,6 +2307,8 @@ hr[data-ke-style='style8'],
   padding: 10px;
   box-sizing: border-box;
   background-color: #fcfcfc;
+  max-height: 50vh;
+  overflow-y: auto;
 }
 
 .toc-list {

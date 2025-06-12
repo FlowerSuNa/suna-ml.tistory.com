@@ -50,6 +50,10 @@
           });">
   </script>
 
+  <!-- Toc generation -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.25.0/tocbot.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.25.0/tocbot.min.js"></script>
+
 </head>
 
 <body id="[##_body_id_##]">
@@ -180,17 +184,14 @@
               <div class="date">[##_notice_rep_date_##]</div>
             </div>
 
+            <div class="toc toc-fixed" ></div> <!-- Toc -->
+
             <div id="body" class="entry">
               <div class="tag_label">
                 <s_tag_label>
                   <span>[##_tag_label_rep_##]</span>
                   <div class="clear"></div>
                 </s_tag_label>
-              </div>
-
-              <div id="toc-container" style="position:fixed; top:100px; right:20px; width:200px; background:#f9f9f9; border:1px solid #ddd; padding:10px; z-index:999;">
-                <strong>📑 목차</strong>
-                <ul id="toc-list" style="list-style:none; padding-left:10px;"></ul>
               </div>
 
               <div class="article" id="article-view">
@@ -204,6 +205,8 @@
               <h2><a href="[##_article_rep_link_##]">[##_article_rep_title_##]</a></h2>
               <div class="date">[##_article_rep_date_##]</div>
             </div>
+
+            <div class="toc toc-fixed" ></div> <!-- Toc -->
 
             <div id="body" class="entry">
               <div class="tag_label">
@@ -243,6 +246,8 @@
               </div>
               <div class="date">[##_article_rep_date_##]</div>
             </div>
+            
+            <div class="toc toc-fixed" ></div> <!-- Toc -->
 
             <div id="body" class="entry">
               <div class="tag_label">
@@ -348,66 +353,60 @@
     });
   </script>
 
-  <!-- toc-container -->
-  <!--
+  <!-- Toc codes -->
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const tocContainer = document.getElementById("toc");
-      const headers = document.querySelectorAll("h2, h3");
+    var content = document.querySelector('#article-view');
+    var startContent = document.createElement("h7");
+    
+    startContent.classList.add('toc-default-header');
+    content.insertBefore(startContent, content.firstChild);
 
-      headers.forEach((header, index) => {
-        const id = header.id || `section-${index}`;
-        header.id = id;
+    var headings = content.querySelectorAll('h1, h2, h3');
+    var headingMap = {};
 
-        const li = document.createElement("li");
-        li.style.marginLeft = header.tagName === "H3" ? "16px" : "0px";
+    Array.prototype.forEach.call(headings, function (heading) {
+        if (heading.parentElement.classList.contains('another_category')) {
+          heading.classList.add('another_category_header');
+        }
+        else {
+          var id = heading.id ? heading.id : heading.textContent.trim().toLowerCase()
+                    .split(' ').join('-').replace(/[\!\@\#\$\%\^\&\*\(\):]/ig, '');
+          headingMap[id] = !isNaN(headingMap[id]) ? ++headingMap[id] : 0;
 
-        const a = document.createElement("a");
-        a.href = `#${id}`;
-        a.textContent = header.textContent;
-        li.appendChild(a);
-
-        tocContainer.appendChild(li);
+          if (headingMap[id]) {
+            heading.id = id + '-' + headingMap[id];
+          } else {
+            heading.id = id;
+          }
+        }
       });
+
+    tocbot.init({
+      tocSelector: '.toc',
+      contentSelector: '#article-view',
+      headingSelector:'h1, h2, h3',
+      hasInnerContainers: false,
+      ignoreSelector: '.another_category_header'
     });
-  </script>
-  -->
-  
-  <!-- 목차 id 자동 생성 -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // 약간 지연해서 실행 (본문이 삽입되기를 기다림)
-      setTimeout(() => {
-        const content = document.querySelector("#article-view");
-        const tocList = document.getElementById("toc-list");
 
-        if (!content || !tocList) return;
+    $(document).ready(function(){
+      var toc = $('.toc');
+      toc.addClass('toc-absolute');
 
-        const headings = content.querySelectorAll("h1, h2, h3");
-        if (!headings.length) return; // h 태그가 없으면 중단
+      var toc_top = toc.parent().offset().top;
+      $(window).scroll(function() {
+        if ($(this).scrollTop() >= toc_top) {
+          toc.addClass('toc-fixed');
+          toc.removeClass('toc-absolute');
+        } else {
+          toc.addClass('toc-absolute');
+          toc.removeClass('toc-fixed');
+        }
+      });
 
-        headings.forEach((heading, index) => {
-          const text = heading.textContent;
-          const id = "heading-" + index;
-          heading.setAttribute("id", id);
-
-          const level = parseInt(heading.tagName.slice(1));
-          const li = document.createElement("li");
-          li.style.marginLeft = (level - 1) * 10 + "px";
-
-          const link = document.createElement("a");
-          link.setAttribute("href", "#" + id);
-          link.textContent = text;
-          link.style.textDecoration = "none";
-          link.style.color = "#333";
-
-          li.appendChild(link);
-          tocList.appendChild(li);
-        });
-      }, 200); // 200ms 딜레이로 실행
     });
-  </script>
 
+  </script>
 </body>
 
 </html>

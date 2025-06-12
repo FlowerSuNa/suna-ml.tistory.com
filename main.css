@@ -1291,16 +1291,17 @@ a:hover {
 /* 텍스트 관련 */
 #article-view h2[data-ke-size] {
   font-size: 1.62em;
+  color: #009a87;
   line-height: 1.46;
 }
 
 #article-view h3[data-ke-size] {
-  font-size: 1.44em;
+  font-size: 1.25em;
   line-height: 1.48;
 }
 
 #article-view h4[data-ke-size] {
-  font-size: 1.25em;
+  font-size: 1.12em;
   line-height: 1.55;
 }
 
@@ -1323,7 +1324,6 @@ a:hover {
 #article-view h4 {
   font-weight: normal;
   letter-spacing: -1px;
-  color: #000;
   margin: 1em 0 20px;
 }
 
@@ -2288,41 +2288,59 @@ hr[data-ke-style='style8'],
   word-break: break-all;
 }
 
-#toc-container {
+/* custom */
+/*tocbot*/
+.toc-absolute {
+  display: flex;
+  position: absolute;
+  margin-bottom:165px;
+}
+
+.toc-fixed {
   position: fixed;
-  right: 30px;
-  top: 120px;
-  width: 200px;
-  max-height: 80vh;
-  overflow-y: auto;
-  background: #f9f9f9;
-  padding: 12px;
-  border-left: 4px solid #aaa;
-  border-radius: 8px;
-  font-size: 14px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  z-index: 999;
+  bottom: 165px;
 }
 
-#toc-container h3 {
-  margin-top: 0;
-  font-weight: bold;
+.toc {
+  margin: 0 0 0 1030px;
+  width: 250px;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #fcfcfc;
 }
 
-#toc-container ul {
-  list-style: none;
-  padding-left: 0;
+.toc-list {
+  margin-top: 10px !important;
+  padding-bottom: 5px !important;
+  font-size: 0.9em;
 }
 
-#toc-container li {
-  margin: 6px 0;
+.toc > .toc-list li {
+  margin-bottom: 10px;
 }
 
-#toc-container a {
-  color: #333;
+.toc > .toc-list .toc-link::before {
+  margin-top: -0.45em;
+  align-items: center;
+  align-content: center;
+}
+
+.toc > .toc-list li:last-child {
+  margin-bottom: 0;
+}
+
+.toc > .toc-list .node-name--H7 {
+  display: none;
+}
+
+.toc-default-header {
+  display: none;
+}
+
+.toc > .toc-list li a {
   text-decoration: none;
 }
 
-#toc-container a:hover {
-  text-decoration: underline;
+.toc-list-item .is-collapsed{
+  max-height: 3000px;
 }
